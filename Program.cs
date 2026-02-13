@@ -6,6 +6,12 @@ Console.WriteLine("Hello, World!");
 string cacheName = "demoCache";
 
 // Connect to cache
-ICache cache = CacheManager.GetCache(cacheName);
+var options = new CacheConnectionOptions();
+
+options.UserCredentials = new Credentials("test", "test12");
+
+ICache cache = CacheManager.GetCache(cacheName, options);
 
 Console.WriteLine("cache connected");
+
+Console.ReadLine();
