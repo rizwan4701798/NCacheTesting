@@ -1,3 +1,14 @@
 <Solution>
-  <Project Path="NCacheTesting.csproj" />
+  <Project Path="../AsyncOperations/AsyncOperations.csproj" Id="f7ff2ad9-798d-4036-9565-3c62d29365cb" />
+  <Project Path="../DurableSubscriber/DurableSubscriber.csproj" Id="cf0ca5fe-3085-4f63-8c6f-b926694c65c4" />
+  <Project Path="../EventNotifications/EventNotifications.csproj" Id="ed2907c9-ce86-404a-9b2c-52bb3baca1ed" />
+  <Project Path="../ItemVersioning/ItemVersioning.csproj" Id="f66a3187-05b0-40c9-841a-f558b8a2962a" />
+  <Project Path="../Locking/Locking.csproj" Id="db407fe1-755d-4221-a50f-c3f8e4f1ea4f" />
+  <Project Path="../NonDurableSubscriber/NonDurableSubscriber.csproj" Id="43e7a691-cc67-435d-8014-567245c306d7" />
+  <Project Path="../PubSub/PubSubPublisher.csproj" Id="9c9e5dd5-d570-4095-9e04-b7936c3e444f" />
+  <Project Path="../ReadWriteTheuProviders/ReadWriteThruProvidersUsage.csproj" Id="884a26f1-2afb-4d19-b434-57af7bf123e3" />
+  <Project Path="../ReadWriteThruProviders/ReadWriteThruProviders.csproj" Id="7ee239ea-b920-42b9-a26d-954120dfc8b5" />
+  <Project Path="../SamoleData/SamoleData.csproj" Id="a2ac69a1-6c13-4e4c-a734-0b1404e7becd" />
+  <Project Path="../TagsAndNamedTags/TagsAndNamedTags.csproj" Id="f2d37d0f-538b-48bc-9bb3-a9bf3986e93c" />
+  <Project Path="BasicAndBulkOperations.csproj" />
 </Solution>

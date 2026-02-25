@@ -1,28 +1,99 @@
 ﻿using NCacheTesting.Models;
 using NCacheTesting.Services;
 using Alachisoft.NCache.Client;
+using Alachisoft.NCache.Config.Dom;
 
-string cacheName = "demoCache";
-var options = new CacheConnectionOptions();
-options.UserCredentials = new Credentials("test", "test12");
+string cacheName = "ctPartitionedReplicaCache";
 
 try
 {
-    ICache cache = CacheManager.GetCache(cacheName, options);
+    ICache cache = CacheManager.GetCache(cacheName);
     Console.WriteLine("Cache connected successfully.");
 
     var cacheService = new CacheService(cache);
     var product = new Product { Id = 1, Name = "Laptop", Category = "Electronics", Price = 1200.00m };
     string key = $"Product:{product.Id}";
+    cache.Clear();
+
+    CacheItem cacheItem = new CacheItem(product);
+    cacheItem.Priority = Alachisoft.NCache.Runtime.CacheItemPriority.AboveNormal;
 
     // Add
     Console.WriteLine("Adding item to cache...");
-    cacheService.Add(key, product);
+  //  cacheService.Add(key, product);
 
     // Get
     Console.WriteLine("Fetching item from cache...");
-    var cachedProduct = cacheService.Get<Product>(key);
-    Console.WriteLine($"Retrieved: {cachedProduct}");
+
+    cacheItem.Expiration = new Alachisoft.NCache.Runtime.Caching.Expiration(Alachisoft.NCache.Runtime.Caching.ExpirationType.Absolute, TimeSpan.FromSeconds(5));
+
+    try
+    {
+        int itemSizeInKB = 200; // each item = 50KB
+        int counter = 0;
+        long cachecount = 0;
+
+        while (true)
+        {
+            byte[] data = new byte[itemSizeInKB * 1024];
+            new Random().NextBytes(data);
+            var keyName = "key_" + counter;
+
+            CacheItem cacheItem123 = new CacheItem(data);
+
+            if (keyName == "key_0")
+            {
+                cacheItem123.Priority = Alachisoft.NCache.Runtime.CacheItemPriority.High;
+            }
+
+
+            cache.Add(keyName, cacheItem123);
+
+            if(true)
+            {
+                var cacheItem1 = cache.Get<byte[]>(keyName);
+            }
+
+            Console.WriteLine($"Added item {counter}");
+            counter++;
+            cachecount = cache.Count;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Cache full or error: {ex.Message}");
+    }
+    var keyn = "key_0";
+
+    for (int i = 0; i < 20; i++)
+    {
+         keyn = "key_" + i;
+         var cacheItem1 = cache.Get<byte[]>(keyn);
+        if (cacheItem1 is null)
+        {
+            Console.WriteLine($"evicted item {keyn}");
+        }
+        else
+        {
+            Console.WriteLine($"Fetched item {keyn}");
+        }
+    }
+
+
+
+    var size =  cache.Count;
+
+    var cacheitem =  cache.GetCacheItem("test1234");
+
+    var cacheitem1 = cache.GetCacheItem("test1234");
+
+    var prodcut =  cacheItem .GetValue<Product>();
+
+    cache.Remove("test1234");
+
+
+
+
 
     // Update
     Console.WriteLine("Updating item in cache...");
@@ -31,8 +102,8 @@ try
 
     // Get Updated
     Console.WriteLine("Fetching updated item from cache...");
-    cachedProduct = cacheService.Get<Product>(key);
-    Console.WriteLine($"Retrieved Updated: {cachedProduct}");
+  //  cachedProduct = cacheService.Get<Product>(key);
+   // Console.WriteLine($"Retrieved Updated: {cachedProduct}");
 
     // Remove
     Console.WriteLine("Removing item from cache...");
